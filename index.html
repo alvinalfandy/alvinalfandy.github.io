@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Khodam</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('https://static.promediateknologi.id/crop/0x0:0x0/750x500/webp/photo/p1/294/2023/12/12/Weton-yang-disukai-khodam-macan-334627221.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            width: 320px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 2s ease-in-out;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-transform: uppercase;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        input[type="text"]:focus {
+            box-shadow: 0 0 5px #28a745;
+            outline: none;
+        }
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+        .result {
+            margin-top: 20px;
+            display: none;
+            font-size: 18px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 4px solid #3498db;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Check khodam yg ada di dalam diri kamu</h1>
+        <input type="text" id="name" placeholder="Masukkan nama kamu">
+        <button onclick="checkKhodam()">Cek kodam</button>
+        <div class="loader" id="loader"></div>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function checkKhodam() {
+            var name = document.getElementById('name').value;
+            if (name === '') {
+                alert('Masukkan nama kamu dulu!');
+                return;
+            }
+
+            var loader = document.getElementById('loader');
+            var result = document.getElementById('result');
+            
+            loader.style.display = 'block';
+            result.style.display = 'none';
+            result.innerHTML = "Kami sedang memeriksa khodam yang ada di dalam diri kamu...";
+            
+            setTimeout(function() {
+                var khodams = [
+                    "Khodam Macan Putih", "Khodam Macan Kumbang", "Khodam Naga", "Khodam Jin Qorin", "Khodam Ular", 
+                    "Khodam Buaya Putih", "Khodam Ratu", "Khodam Harimau Loreng", "Khodam Nenek Tua", "Khodam Singa Api", 
+                    "Khodam Buto Ijo", "Khodam Wesi Kuning", "Khodam Merah Delima", "Khodam Singo Barong", 
+                    "Khodam Keris Semar Mesem", "Khodam Idu Geni Sabdo Dadi", "Khodam Gagang Pintu", 
+                    "Khodam Sendal Jepit", "Khodam Kecoak Mekanik", "Khodam Kulkas", "Khodam Beat Mber", "Khodam Knalpot Racing", 
+                    "Khodam Kuda Lumping", "Khodam Sapu Jagat", "Khodam Sapu Lidi", "Khodam Nasi Bungkus", "Khodam Es Cendol", 
+                    "Khodam Bebek Nungging", "Khodam Ayam Jago", "Khodam Cabe Rawit", "Khodam Kucing Oren", "Khodam Kucing Hitam", 
+                    "Khodam Kipas Angin", "Khodam Jendela Tertutup", "Khodam Pintu Gaib", "Khodam Roti Bakar", "Khodam Pisang Goreng", 
+                    "Khodam Sambel Terasi", "Khodam Listrik Padam", "Khodam Batu Akik", "Khodam Air Kelapa", "Khodam Teh Manis", 
+                    "Khodam Secangkir Kopi", "Khodam Lampu Padam", "Khodam Sepeda Kumbang", "Khodam Tukang Bakso", "Khodam Tukang Sate", 
+                    "Khodam Jengkol", "Khodam Pete", "Khodam Semangka", "Khodam Durian", "Khodam Mangga", "Khodam Rambutan", 
+                    "Khodam Jeruk", "Khodam Anggur", "Khodam Apel", "Khodam Nanas", "Khodam Pisang", "Khodam Salak", 
+                    "Khodam Melon", "Khodam Pepaya", "Khodam Mangosteen", "Khodam Buah Naga", "Khodam Strawberry", 
+                    "Khodam Blueberry", "Khodam Blackberry", "Khodam Raspberry", "Khodam Cranberry", "Khodam Kelapa Muda", 
+                    "Khodam Air Putih", "Khodam Air Terjun", "Khodam Ombak Laut", "Khodam Pasir Putih", "Khodam Batu Karang", 
+                    "Khodam Pohon Beringin", "Khodam Pohon Kelapa", "Khodam Pohon Pisang", "Khodam Pohon Mangga", "Khodam Pohon Rambutan", 
+                    "Khodam Pohon Durian", "Khodam Pohon Jati", "Khodam Pohon Bambu", "Khodam Batu Besar", "Khodam Batu Kecil", 
+                    "Khodam Batu Kerikil", "Khodam Batu Hitam", "Khodam Batu Putih", "Khodam Batu Hijau", "Khodam Batu Merah", 
+                    "Khodam Batu Biru", "Khodam Batu Kuning", "Khodam Batu Ungu", "Khodam Batu Coklat", "Khodam Batu Abu-abu", 
+                    "Khodam Batu Emas", "Khodam Batu Perak"
+                ];
+                var randomKhodam = khodams[Math.floor(Math.random() * khodams.length)];
+                
+                loader.style.display = 'none';
+                result.style.display = 'block';
+                result.innerHTML = `
+                    Khodam yang ada di dalam diri <strong>${name}</strong>:<br><strong>${randomKhodam}</strong><br><br>
+                    Jangan lupa share ke yang lain agar mereka tahu sosok aseli yang ada di dalam diri kamu.<br><br>
+                    <button onclick="location.reload()">Ulangi</button>
+                `;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
