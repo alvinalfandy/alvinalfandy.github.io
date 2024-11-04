@@ -1,0 +1,345 @@
+/* One Piece Theme Styles */
+:root {
+    --primary: #D32F2F;
+    --secondary: #1976D2;
+    --accent: #FDD835;
+    --text: #212121;
+    --background: #FAFAFA;
+    --strawhat: #FFB74D;
+  }
+  
+  /* General Styles */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--background);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+  
+  /* Preloader */
+  #preloader {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .straw-hat {
+    animation: float 2s infinite ease-in-out;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  /* Parallax Background */
+  .parallax-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/grand-line-map.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.1;
+    z-index: -1;
+  }
+  
+  /* Navigation */
+  .navbar {
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid var(--accent);
+  }
+  
+  .navbar-brand {
+    font-family: 'Jolly Lodger', cursive;
+    font-size: 2rem;
+    color: var(--accent) !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .nav-link {
+    font-weight: 500;
+    color: white !important;
+    position: relative;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background: var(--accent);
+    transition: all 0.3s ease;
+  }
+  
+  .nav-link:hover::after {
+    width: 100%;
+    left: 0;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    padding: 4rem 2rem;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('../images/thousand-sunny.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+  
+  .hero-content {
+    color: white;
+    max-width: 800px;
+  }
+  
+  .hero-title {
+    font-family: 'Jolly Lodger', cursive;
+    font-size: 5rem;
+    margin-bottom: 1rem;
+    color: var(--accent);
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+  }
+  
+  .hero-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Feature Cards */
+  .feature-cards {
+    padding: 4rem 0;
+  }
+  
+  .bounty-card {
+    background: url('../images/wanted-poster.png') no-repeat center/cover;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .bounty-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .bounty-card:hover::before {
+    opacity: 1;
+  }
+  
+  .bounty-card:hover {
+    transform: translateY(-10px);
+  }
+  
+  /* Floating Navigation */
+  .floating-nav {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+  }
+  
+  .nav-item {
+    width: 50px;
+    height: 50px;
+    background: rgba(0,0,0,0.8);
+    border-radius: 50%;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  
+  .nav-item:hover {
+    transform: scale(1.1);
+  }
+  
+  .nav-item[data-tooltip]::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    right: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--accent);
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: black;
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-item:hover[data-tooltip]::before {
+    opacity: 1;
+    right: 70px;
+  }
+  
+  /* Footer Waves Animation */
+  .site-footer {
+    position: relative;
+    background: #000;
+    min-height: 300px;
+    padding: 20px 50px;
+    color: white;
+  }
+  
+  .waves {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    overflow: hidden;
+  }
+  
+  .wave {
+    position: absolute;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background: url('../images/wave.png') repeat-x;
+    animation: wave 10s linear infinite;
+  }
+  
+  #wave1 {
+    z-index: 4;
+    opacity: 0.7;
+    animation-delay: 0s;
+    bottom: 0;
+  }
+  
+  #wave2 {
+    z-index: 3;
+    opacity: 0.5;
+    animation-delay: -2s;
+    bottom: 10px;
+  }
+  
+  #wave3 {
+    z-index: 2;
+    opacity: 0.3;
+    animation-delay: -4s;
+    bottom: 15px;
+  }
+  
+  #wave4 {
+    z-index: 1;
+    opacity: 0.2;
+    animation-delay: -6s;
+    bottom: 20px;
+  }
+  
+  @keyframes wave {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  
+  /* DataTables Customization */
+  .dataTables_wrapper {
+    background: rgba(255,255,255,0.9);
+    padding: 2rem;
+    border-radius: 15px;
+    margin: 2rem 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+  
+  table.dataTable {
+    border-collapse: collapse !important;
+    margin: 1rem 0 !important;
+  }
+  
+  .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: var(--accent) !important;
+    border: none !important;
+    color: black !important;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 3rem;
+    }
+    
+    .floating-nav {
+      display: none;
+    }
+    
+    .bounty-card {
+      margin-bottom: 2rem;
+    }
+  }
+  
+  /* Custom Animations */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.6s ease forwards;
+  }
+  
+  @keyframes fadeUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .bounce {
+    animation: bounce 2s infinite;
+  }
+  
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-30px); }
+    60% { transform: translateY(-15px); }
+  }
+  
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 5px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+  }
