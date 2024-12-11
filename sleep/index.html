@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sleep Health Tracker Gen Z Ultimate</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        :root {
+            --bg-color: #0D1B2A;
+            --text-color: #E0E1DD;
+            --accent-color: #415A77;
+            --form-bg: rgba(21, 34, 50, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            height: 100%;
+            overscroll-behavior-y: contain;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0D1B2A, #1F4287);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            perspective: 1000px;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        .container {
+            background: var(--form-bg);
+            border-radius: 20px;
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.4), 
+                0 5px 15px rgba(0,0,0,0.3);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scrollable-content {
+            overflow-y: auto;
+            max-height: calc(90vh - 150px);
+            padding-right: 10px;
+        }
+
+        .scrollable-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollable-content::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .scrollable-content::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 10px;
+        }
+
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 300;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--accent-color);
+            border-radius: 10px;
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        .btn-next, .btn-prev, .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #4ECDC4, #45B7D1);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .progress-step {
+            width: 20px;
+            height: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active {
+            background: #4ECDC4;
+        }
+
+        #resultContainer, #saranContainer {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--accent-color);
+            border-radius: 15px;
+            margin-top: 20px;
+            padding: 20px;
+            color: var(--text-color);
+            overflow-y: auto;
+            max-height: 50vh;
+        }
+
+        .sleep-emoji {
+            font-size: 80px;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .saran-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #4ECDC4;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+                padding: 20px;
+                max-height: 95vh;
+                margin: 10px;
+            }
+
+            .scrollable-content {
+                max-height: calc(95vh - 180px);
+            }
+
+            .sleep-emoji {
+                font-size: 60px;
+            }
+
+            #resultContainer, #saranContainer {
+                max-height: 60vh;
+            }
+        }
+
+        /* Prevent iOS text size adjust */
+        @media screen and (-webkit-min-device-pixel-ratio:0) {
+            select,
+            textarea,
+            input {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress">
+            <div class="progress-step active"></div>
+            <div class="progress-step"></div>
+            <div class="progress-step"></div>
+            <div class="progress-step"></div>
+            <div class="progress-step"></div>
+        </div>
+        
+        <div class="scrollable-content">
+            <form id="sleepForm">
+                <!-- Step 1: Nama dan Umur -->
+                <div class="form-step active" data-step="1">
+                    <div class="form-group">
+                        <label>Nama Kamu</label>
+                        <input type="text" id="nama" required placeholder="Nama lengkap">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Umur</label>
+                        <input type="number" id="umur" min="13" max="35" required placeholder="Berapa umurmu?">
+                    </div>
+
+                    <button type="button" class="btn-next">Lanjut</button>
+                </div>
+
+                <!-- Step 2: Gender dan Waktu Tidur -->
+                <div class="form-step" data-step="2">
+                    <div class="form-group">
+                        <label>Jenis Kelamin</label>
+                        <select id="jenisKelamin" required>
+                            <option value="">Pilih Gender</option>
+                            <option value="L">Laki-laki</option>
+                            <option value="P">Perempuan</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Waktu Tidur Malam</label>
+                        <input type="time" id="waktuTidurMalam" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Waktu Bangun Pagi</label>
+                        <input type="time" id="waktuBangunPagi" required>
+                    </div>
+
+                    <button type="button" class="btn-prev">Kembali</button>
+                    <button type="button" class="btn-next">Lanjut</button>
+                </div>
+
+                <!-- Step 3: Tidur Siang dan Stres -->
+                <div class="form-step" data-step="3">
+                    <div class="form-group">
+                        <label>Tidur Siang? (Opsional)</label>
+                        <select id="tidurSiang">
+                            <option value="tidak">Nggak Tidur Siang</option>
+                            <option value="15-30">Sebentar (15-30 menit)</option>
+                            <option value="30-60">Agak Lama (30-60 menit)</option>
+                            <option value="60+">Tidur Siang Panjang (>60 menit)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tingkat Stres</label>
+                        <select id="stres" required>
+                            <option value="">Seberapa Stres?</option>
+                            <option value="rendah">Santai Banget</option>
+                            <option value="sedang">Agak Kepikiran</option>
+                            <option value="tinggi">Super Stres</option>
+                        </select>
+                    </div>
+
+                    <button type="button" class="btn-prev">Kembali</button>
+                    <button type="button" class="btn-next">Lanjut</button>
+                </div>
+
+                <!-- Step 4: Aktivitas Fisik dan Kafein -->
+                <div class="form-step" data-step="4">
+                    <div class="form-group">
+                        <label>Aktifitas Fisik Sehari-hari</label>
+                        <select id="aktivitasFisik" required>
+                            <option value="">Seberapa Aktif?</option>
+                            <option value="rendah">Kurang Gerak</option>
+                            <option value="sedang">Cukup Aktif</option>
+                            <option value="tinggi">Super Aktif</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Konsumsi Kafein</label>
+                        <select id="kafein" required>
+                            <option value="">Berapa Banyak?</option>
+                            <option value="rendah">Jarang/Tidak Pernah</option>
+                            <option value="sedang">Sesekali</option>
+                            <option value="tinggi">Sering Banget</option>
+                        </select>
+                    </div>
+
+                    <button type="button" class="btn-prev">Kembali</button>
+                    <button type="button" class="btn-next">Lanjut</button>
+                </div>
+
+                <!-- Step 5: Lingkungan Tidur dan Submit -->
+                <div class="form-step" data-step="5">
+                    <div class="form-group">
+                        <label>Kualitas Lingkungan Tidur</label>
+                        <select id="lingkunganTidur" required>
+                            <option value="">Gimana Suasana Kamarmu?</option>
+                            <option value="bagus">Nyaman Banget</option>
+                            <option value="sedang">Biasa Aja</option>
+                            <option value="buruk">Kurang Kondusif</option>
+                        </select>
+                    </div>
+
+                    <button type="button" class="btn-prev">Kembali</button>
+                    <button type="submit" class="btn">Cek Kualitas Tidurku</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="resultContainer" style="display:none;">
+            <div class="sleep-emoji" id="sleepEmoji">😴</div>
+            <div id="hasilAnalisis"></div>
+        </div>
+
+        <div id="saranContainer" style="display:none;">
+            <h3>Saran Khusus Buat Kamu</h3>
+            <div id="saranTidur"></div>
+        </div>
+    </div>
+
+    <script>
+        function createStars() {
+            const body = document.body;
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.width = `${Math.random() * 3}px`;
+                star.style.height = star.style.width;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                body.appendChild(star);
+            }
+        }
+
+        createStars();
+
+        const steps = document.querySelectorAll('.form-step');
+        const progressSteps = document.querySelectorAll('.progress-step');
+        let currentStep = 0;
+
+        function updateStepDisplay() {
+            steps.forEach((step, index) => {
+                step.classList.toggle('active', index === currentStep);
+                progressSteps[index].classList.toggle('active', index <= currentStep);
+            });
+        }
+
+        document.querySelectorAll('.btn-next').forEach(button => {
+            button.addEventListener('click', () => {
+                const currentStepElement = steps[currentStep];
+                const requiredInputs = currentStepElement.querySelectorAll('[required]');
+                let isValid = true;
+
+                requiredInputs.forEach(input => {
+                    if (!input.value.trim()) {
+                        isValid = false;
+                        input.style.borderColor = 'red';
+                    } else {
+                        input.style.borderColor = 'var(--accent-color)';
+                    }
+                });
+
+                if (isValid) {
+                    currentStep++;
+                    updateStepDisplay();
+                }
+            });
+        });
+
+        document.querySelectorAll('.btn-prev').forEach(button => {
+            button.addEventListener('click', () => {
+                currentStep--;
+                updateStepDisplay();
+            });
+        });
+
+        document.getElementById('sleepForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            hitungKualitasTidur();
+        });
+
+        function hitungKualitasTidur() {
+            // Ambil semua input
+            const umur = parseInt(document.getElementById('umur').value);
+            const waktuTidurMalam = document.getElementById('waktuTidurMalam').value;
+            const waktuBangunPagi = document.getElementById('waktuBangunPagi').value;
+            const tidurSiang = document.getElementById('tidurSiang').value;
+            const stres = document.getElementById('stres').value;
+            const aktivitasFisik = document.getElementById('aktivitasFisik').value;
+            const kafein = document.getElementById('kafein').value;
+            const lingkunganTidur = document.getElementById('lingkunganTidur').value;
+
+            // Algoritma Hitung Durasi Tidur
+            const tidur = new Date(`2023-01-01 ${waktuTidurMalam}`);
+            const bangun = new Date(`2023-01-01 ${waktuBangunPagi}`);
+            let durasiTidur = (bangun - tidur) / (1000 * 60 * 60);
+            if (durasiTidur < 0) durasiTidur += 24;
+
+            // Algoritma Kualitas Tidur Super Kompleks
+            let skorTidur = 0;
+            let feedback = "";
+            let emoji = "😴";
+            let saran = [];
+
+            // 1. Skor Durasi Tidur Berdasarkan Umur
+            if (umur >= 13 && umur <= 17) {
+                if (durasiTidur >= 8 && durasiTidur <= 10) skorTidur += 3;
+                else if (durasiTidur >= 7 && durasiTidur < 8) skorTidur += 2;
+                else skorTidur += 1;
+            } else if (umur >= 18 && umur <= 25) {
+                if (durasiTidur >= 7 && durasiTidur <= 9) skorTidur += 3;
+                else if (durasiTidur >= 6 && durasiTidur < 7) skorTidur += 2;
+                else skorTidur += 1;
+            }
+
+            // 2. Skor Tidur Siang
+            switch(tidurSiang) {
+                case "15-30": 
+                    skorTidur += 1; 
+                    saran.push("Tidur siang sebentar bagus buat refresh otak!");
+                    break;
+                case "30-60": 
+                    skorTidur += 0.5; 
+                    saran.push("Hindari tidur siang terlalu lama ya!");
+                    break;
+                case "60+": 
+                    skorTidur -= 1; 
+                    saran.push("Tidur siang kepanjangan bisa ganggu ritme tidur malammu!");
+                    break;
+            }
+
+            // 3. Skor Stres
+            switch(stres) {
+                case "rendah": 
+                    skorTidur += 2; 
+                    break;
+                case "sedang": 
+                    skorTidur += 1; 
+                    saran.push("Coba meditasi atau breathing exercise buat kurangin stres!");
+                    break;
+                case "tinggi": 
+                    skorTidur -= 1; 
+                    saran.push("Wajib banget kamu kurangin stres! Coba konseling atau aktivitas yang menenangkan.");
+                    break;
+            }
+
+            // 4. Skor Aktivitas Fisik
+            switch(aktivitasFisik) {
+                case "rendah": 
+                    skorTidur -= 1; 
+                    saran.push("Gerak dikit dong! Olahraga ringan bisa bantu kualitas tidurmu.");
+                    break;
+                case "sedang": 
+                    skorTidur += 1; 
+                    break;
+                case "tinggi": 
+                    skorTidur += 2; 
+                    saran.push("Keren! Aktifitas fisikmu bagus banget buat kualitas tidur!");
+                    break;
+            }
+
+            // 5. Skor Kafein
+            switch(kafein) {
+                case "rendah": 
+                    skorTidur += 2; 
+                    break;
+                case "sedang": 
+                    skorTidur += 1; 
+                    saran.push("Kurangin konsumsi kafein, terutama jelang tidur!");
+                    break;
+                case "tinggi": 
+                    skorTidur -= 1; 
+                    saran.push("Kafein kebanyakan bisa ganggu kualitas tidurmu! Coba batasi ya!");
+                    break;
+            }
+
+            // 6. Skor Lingkungan Tidur
+            switch(lingkunganTidur) {
+                case "bagus": 
+                    skorTidur += 2; 
+                    saran.push("Lingkungan tidurmu keren! Pertahankan!");
+                    break;
+                case "sedang": 
+                    skorTidur += 1; 
+                    saran.push("Coba rapikan kamar biar makin nyaman!");
+                    break;
+                case "buruk": 
+                    skorTidur -= 1; 
+                    saran.push("Benerin deh lingkungan tidurmu. Pastikan gelap, tenang, dan sejuk!");
+                    break;
+            }
+
+            // Generate Feedback Ultimate
+            if (skorTidur >= 8) {
+                feedback = "WOW! Kualitas tidurmu EPIC banget! 🌟 Kamu adalah master of sleep!";
+                emoji = "🤩";
+            } else if (skorTidur >= 5 && skorTidur < 8) {
+                feedback = "Keren! Kualitas tidurmu makin mantul. Tinggal sedikit lagi perfect! 💪";
+                emoji = "😎";
+            } else if (skorTidur >= 3 && skorTidur < 5) {
+                feedback = "Ada ruang buat improvement nih! Kamu bisa lebih baik lagi! 💤";
+                emoji = "😴";
+            } else {
+                feedback = "Waktunya reset total pola tidurmu! Kamu bisa lebih baik dari ini! 🆘";
+                emoji = "😓";
+            }
+
+            // Tampilkan Hasil
+            document.getElementById('resultContainer').style.display = 'block';
+            document.getElementById('saranContainer').style.display = 'block';
+            document.getElementById('sleepEmoji').textContent = emoji;
+            document.getElementById('hasilAnalisis').innerHTML = `
+                <h3>Analisis Tidurmu:</h3>
+                <p>Durasi Tidur: ${durasiTidur.toFixed(1)} jam</p>
+                <p>Skor Kualitas Tidur: ${skorTidur.toFixed(1)}/10</p>
+                <p>${feedback}</p>
+            `;
+
+            // Generate Saran
+            const saranTidur = document.getElementById('saranTidur');
+            saranTidur.innerHTML = saran.map((item, index) => 
+                `<div class="saran-item">${index + 1}. ${item}</div>`
+            ).join('');
+        }
+    </script>
+</body>
+</html>
