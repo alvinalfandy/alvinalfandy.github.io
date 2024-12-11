@@ -1,0 +1,329 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+    --bg-color: #0D1B2A;
+    --text-color: #E0E1DD;
+    --accent-color: #415A77;
+    --form-bg: rgba(21, 34, 50, 0.8);
+    --gradient-start: #4ECDC4;
+    --gradient-end: #45B7D1;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    height: 100%;
+    overscroll-behavior-y: contain;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0D1B2A, #1F4287);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    perspective: 1000px;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* New App Title Styles */
+.app-title {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2.5em;
+    font-weight: 600;
+    text-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    z-index: 10;
+    text-align: center;
+    width: 100%;
+    animation: titleGlow 3s infinite alternate;
+}
+
+/* Title Glow Animation */
+@keyframes titleGlow {
+    0% { 
+        text-shadow: 0 4px 6px rgba(78,205,196,0.3);
+        transform: translateX(-50%) scale(1);
+    }
+    100% { 
+        text-shadow: 0 6px 10px rgba(69,183,209,0.5);
+        transform: translateX(-50%) scale(1.02);
+    }
+}
+
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+    0% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+.container {
+    background: var(--form-bg);
+    border-radius: 20px;
+    box-shadow: 
+        0 15px 35px rgba(0,0,0,0.4), 
+        0 5px 15px rgba(0,0,0,0.3);
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.5s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin-top: 80px;
+    transform: perspective(1000px) rotateX(2deg);
+}
+
+.container:hover {
+    transform: perspective(1000px) rotateX(0deg) scale(1.02);
+    box-shadow: 
+        0 20px 40px rgba(0,0,0,0.5), 
+        0 10px 20px rgba(0,0,0,0.4);
+}
+
+.scrollable-content {
+    overflow-y: auto;
+    max-height: calc(90vh - 150px);
+    padding-right: 10px;
+}
+
+.scrollable-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scrollable-content::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 10px;
+}
+
+.form-step {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.form-step.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-weight: 300;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid transparent;
+    background-image: 
+        linear-gradient(var(--form-bg), var(--form-bg)), 
+        linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    border-radius: 10px;
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+input:focus, select:focus {
+    box-shadow: 0 0 15px rgba(78,205,196,0.3);
+}
+
+.btn-next, .btn-prev, .btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-next:hover, .btn-prev:hover, .btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(78,205,196,0.4);
+}
+
+.progress {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.progress-step {
+    width: 25px;
+    height: 25px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    position: relative;
+}
+
+.progress-step.active {
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    transform: scale(1.2);
+    box-shadow: 0 4px 10px rgba(78,205,196,0.5);
+}
+
+.progress-step.active::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    border-radius: 50%;
+    opacity: 0.3;
+    z-index: -1;
+    animation: progressPulse 1.5s infinite alternate;
+}
+
+@keyframes progressPulse {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+}
+
+#resultContainer, #saranContainer {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--accent-color);
+    border-radius: 15px;
+    margin-top: 20px;
+    padding: 20px;
+    color: var(--text-color);
+    overflow-y: auto;
+    max-height: 50vh;
+}
+
+.sleep-emoji {
+    font-size: 80px;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.saran-item {
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-left: 4px solid var(--gradient-start);
+    transition: all 0.3s ease;
+}
+
+.saran-item:hover {
+    transform: translateX(10px);
+    background: rgba(255,255,255,0.15);
+}
+
+@media (max-width: 600px) {
+    .app-title {
+        font-size: 2em;
+        top: 10px;
+    }
+
+    .container {
+        width: 95%;
+        padding: 20px;
+        max-height: 95vh;
+        margin: 10px;
+        transform: none;
+    }
+
+    .container:hover {
+        transform: none;
+    }
+
+    .scrollable-content {
+        max-height: calc(95vh - 180px);
+    }
+
+    .sleep-emoji {
+        font-size: 60px;
+    }
+
+    #resultContainer, #saranContainer {
+        max-height: 60vh;
+    }
+
+    .progress-step {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* Prevent iOS text size adjust */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    select,
+    textarea,
+    input {
+        font-size: 16px;
+    }
+}
