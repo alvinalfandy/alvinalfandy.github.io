@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pixel Pomodoro</title>
+  <style>
+    body {
+      background: #f9f6f1;
+      font-family: monospace;
+      text-align: center;
+      margin: 50px;
+    }
+    h1 {
+      font-size: 80px;
+      border: 5px solid #d47d1e;
+      display: inline-block;
+      padding: 10px 20px;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 20px;
+      margin: 5px;
+    }
+    .controls {
+      margin: 20px;
+    }
+    .controls input {
+      width: 50px;
+      text-align: center;
+      font-size: 20px;
+    }
+    button {
+      font-size: 20px;
+      margin: 10px;
+      padding: 10px 20px;
+      background: #fff;
+      border: 2px solid #444;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #ddd;
+    }
+    .settings {
+      position: absolute;
+      top: 100px;
+      right: 50px;
+      text-align: left;
+      font-size: 20px;
+    }
+    .settings input {
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="timer">25:00</h1>
+
+  <p>Focus Time</p>
+  <p>take a breath,</p>
+  <p>you are right on time ✶</p>
+
+  <div class="controls">
+    <button onclick="startTimer()">Start</button>
+    <button onclick="pauseTimer()">Pause</button>
+    <button onclick="resetTimer()">Reset</button>
+  </div>
+
+  <div class="settings">
+    <label>Focus:</label><br>
+    <input type="number" id="focusInput" value="25"><br>
+    <label>Short Break:</label><br>
+    <input type="number" id="shortBreakInput" value="5"><br>
+    <label>Long Break:</label><br>
+    <input type="number" id="longBreakInput" value="15"><br>
+  </div>
+
+  <script>
+    let timer;
+    let timeLeft = 25 * 60;
+    let isRunning = false;
+
+    function updateDisplay() {
+      const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+      const seconds = (timeLeft % 60).toString().padStart(2, '0');
+      document.getElementById("timer").textContent = `${minutes}:${seconds}`;
+    }
+
+    function startTimer() {
+      if (isRunning) return;
+      isRunning = true;
+      const focusMinutes = parseInt(document.getElementById("focusInput").value);
+      if (timeLeft === 25 * 60) {
+        timeLeft = focusMinutes * 60;
+      }
+      timer = setInterval(() => {
+        if (timeLeft > 0) {
+          timeLeft--;
+          updateDisplay();
+        } else {
+          clearInterval(timer);
+          isRunning = false;
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      clearInterval(timer);
+      isRunning = false;
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      isRunning = false;
+      const focusMinutes = parseInt(document.getElementById("focusInput").value);
+      timeLeft = focusMinutes * 60;
+      updateDisplay();
+    }
+
+    updateDisplay();
+  </script>
+
+</body>
+</html>
