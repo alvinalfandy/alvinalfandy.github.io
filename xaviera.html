@@ -4,135 +4,460 @@
   <meta charset="UTF-8">
   <title>Pixel Pomodoro</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
+    @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+    
     body {
-      background: #f9f6f1;
-      font-family: monospace;
+      background: #f9e9e0;
+      font-family: 'VT323', monospace;
       text-align: center;
-      margin: 50px;
-      color: #333;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: #444;
     }
-
-    #timer {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 60px;
-      border: 5px solid #d47d1e;
+    
+    .app-container {
+      background: #f9e9e0;
+      border: 8px solid #d47d1e;
+      border-radius: 6px;
+      padding: 30px;
+      max-width: 600px;
+      position: relative;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.1);
+    }
+    
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 5px;
+      border-bottom: 2px solid rgba(0,0,0,0.1);
+    }
+    
+    .app-title {
+      font-size: 24px;
+      margin: 0;
+    }
+    
+    /* Header styles */
+    
+    .timer-display {
+      font-size: 90px;
+      border: 4px solid #d47d1e;
+      background-color: #fff9f2;
       display: inline-block;
-      padding: 20px 30px;
-      margin-bottom: 20px;
+      padding: 10px 40px;
+      margin: 20px 0;
+      letter-spacing: 2px;
+      border-radius: 2px;
+      color: #333;
+      font-family: 'VT323', monospace;
+      position: relative;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+      text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
     }
-
-    p {
-      font-size: 18px;
-      margin: 5px;
+    
+    .focus-message {
+      font-size: 24px;
+      line-height: 1.3;
+      margin: 15px 0;
+      color: #555;
     }
-
-    .controls button {
-      font-size: 18px;
-      margin: 10px 5px;
-      padding: 10px 30px;
+    
+    .pixel-star {
+      color: #d47d1e;
+      font-size: 26px;
+    }
+    
+    .controls {
+      margin: 25px 0;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    button {
+      font-family: 'VT323', monospace;
+      font-size: 24px;
+      padding: 10px 25px;
       background: #fff;
       border: 2px solid #444;
       cursor: pointer;
-      font-family: monospace;
+      min-width: 100px;
+      color: #333;
+      border-radius: 2px;
+      transition: all 0.2s;
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+      position: relative;
+      top: 0;
+      left: 0;
     }
-
-    .controls button:hover {
-      background: #ddd;
+    
+    button:hover {
+      background: #f0f0f0;
     }
-
+    
+    button:active {
+      box-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+      top: 2px;
+      left: 2px;
+    }
+    
     .settings {
-      position: absolute;
-      top: 100px;
-      right: 50px;
-      text-align: left;
-      font-size: 16px;
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+      gap: 20px;
+      flex-wrap: wrap;
     }
-
-    .settings label {
-      display: block;
-      margin-top: 10px;
-      font-family: monospace;
+    
+    .setting-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-
-    .settings input {
-      width: 50px;
+    
+    .setting-label {
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+    
+    .setting-input {
+      width: 60px;
+      text-align: center;
+      font-size: 22px;
       padding: 5px;
+      font-family: 'VT323', monospace;
+      border: 2px solid #444;
+      background: #fff;
+      border-radius: 2px;
+    }
+    
+    .mode-indicator {
+      font-size: 20px;
+      margin-top: 15px;
+      color: #d47d1e;
+      font-weight: bold;
+    }
+    
+    .pixel-border {
+      position: relative;
+    }
+    
+    .pixel-border::after {
+      content: '';
+      position: absolute;
+      top: 1px;
+      left: 1px;
+      right: 1px;
+      bottom: 1px;
+      border: 1px solid rgba(255,255,255,0.3);
+      pointer-events: none;
+    }
+    
+    .cycle-counter {
+      position: absolute;
+      right: 30px;
+      bottom: 20px;
       font-size: 18px;
-      font-family: monospace;
-      margin-top: 5px;
+      color: #888;
+    }
+    
+    /* Sound control */
+    .sound-control {
+      position: absolute;
+      right: 30px;
+      top: 80px;
+      cursor: pointer;
+      font-size: 24px;
+    }
+    
+    /* Animation for timer running */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+    
+    .pulsing {
+      animation: pulse 2s infinite;
     }
   </style>
 </head>
 <body>
 
-  <div id="timer">25:00</div>
-
-  <p>Focus Time</p>
-  <p>take a breath,</p>
-  <p>you are right on time ✶</p>
-
-  <div class="controls">
-    <button onclick="startTimer()">Start</button>
-    <button onclick="pauseTimer()">Pause</button>
-    <button onclick="resetTimer()">Reset</button>
-  </div>
-
-  <div class="settings">
-    <label>Focus:</label>
-    <input type="number" id="focusInput" value="25">
-
-    <label>Short Break:</label>
-    <input type="number" id="shortBreakInput" value="5">
-
-    <label>Long Break:</label>
-    <input type="number" id="longBreakInput" value="15">
+  <div class="app-container">
+    <div class="app-header">
+      <div style="width: 60px;"></div> <!-- Empty space for balance -->
+      <div class="app-title">Pixel Pomodoro</div>
+      <div style="width: 60px;"></div> <!-- Empty space for balance -->
+    </div>
+    
+    <div id="timer" class="timer-display pixel-border">25:00</div>
+    
+    <div class="focus-message">
+      <div>Focus Time</div>
+      <div>take a breath,</div>
+      <div>you are right on time <span class="pixel-star">✶</span></div>
+    </div>
+    
+    <div class="controls">
+      <button id="startBtn" onclick="startTimer()" class="pixel-border">Start</button>
+      <button id="pauseBtn" onclick="pauseTimer()" class="pixel-border">Pause</button>
+      <button id="resetBtn" onclick="resetTimer()" class="pixel-border">Reset</button>
+    </div>
+    
+    <div class="settings">
+      <div class="setting-group">
+        <div class="setting-label">Focus:</div>
+        <input type="number" id="focusInput" class="setting-input pixel-border" value="25" min="1" max="99">
+      </div>
+      
+      <div class="setting-group">
+        <div class="setting-label">Short Break:</div>
+        <input type="number" id="shortBreakInput" class="setting-input pixel-border" value="5" min="1" max="30">
+      </div>
+      
+      <div class="setting-group">
+        <div class="setting-label">Long Break:</div>
+        <input type="number" id="longBreakInput" class="setting-input pixel-border" value="15" min="1" max="60">
+      </div>
+    </div>
+    
+    <div id="modeIndicator" class="mode-indicator">FOCUS MODE</div>
+    
+    <div class="cycle-counter">Cycle: <span id="cycleCount">1</span>/4</div>
+    
+    <div class="sound-control" id="soundToggle" onclick="toggleSound()">🔊</div>
   </div>
 
   <script>
+    // Timer variables
     let timer;
     let timeLeft = 25 * 60;
     let isRunning = false;
-
+    let currentMode = 'focus'; // 'focus', 'shortBreak', 'longBreak'
+    let cycleCount = 1;
+    let soundEnabled = true;
+    
+    // Notification sound
+    const alarmSound = new Audio('https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg');
+    const clickSound = new Audio('https://actions.google.com/sounds/v1/interface/snap.ogg');
+    
+    // Initialize
+    function init() {
+      updateDisplay();
+      document.getElementById('pauseBtn').disabled = true;
+      updateModeIndicator();
+    }
+    
+    // Update timer display
     function updateDisplay() {
       const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
       const seconds = (timeLeft % 60).toString().padStart(2, '0');
       document.getElementById("timer").textContent = `${minutes}:${seconds}`;
+      document.title = `${minutes}:${seconds} - Pixel Pomodoro`;
     }
-
+    
+    // Update mode indicator text and color
+    function updateModeIndicator() {
+      const indicator = document.getElementById('modeIndicator');
+      document.getElementById('cycleCount').textContent = cycleCount;
+      
+      if (currentMode === 'focus') {
+        indicator.textContent = 'FOCUS MODE';
+        indicator.style.color = '#d47d1e';
+        document.querySelector('.focus-message').innerHTML = 
+          '<div>Focus Time</div>' +
+          '<div>take a breath,</div>' +
+          '<div>you are right on time <span class="pixel-star">✶</span></div>';
+      } else if (currentMode === 'shortBreak') {
+        indicator.textContent = 'SHORT BREAK';
+        indicator.style.color = '#2a9d8f';
+        document.querySelector('.focus-message').innerHTML = 
+          '<div>Short Break</div>' +
+          '<div>stretch your body,</div>' +
+          '<div>rest your eyes <span class="pixel-star">✶</span></div>';
+      } else {
+        indicator.textContent = 'LONG BREAK';
+        indicator.style.color = '#457b9d';
+        document.querySelector('.focus-message').innerHTML = 
+          '<div>Long Break</div>' +
+          '<div>well done today,</div>' +
+          '<div>take some time <span class="pixel-star">✶</span></div>';
+      }
+    }
+    
+    // Start timer function
     function startTimer() {
       if (isRunning) return;
-      isRunning = true;
-      const focusMinutes = parseInt(document.getElementById("focusInput").value);
-      if (timeLeft === 25 * 60) {
-        timeLeft = focusMinutes * 60;
+      
+      playSound(clickSound);
+      
+      // Set time based on current mode if timer is reset
+      if (!timer) {
+        if (currentMode === 'focus') {
+          timeLeft = parseInt(document.getElementById("focusInput").value) * 60;
+        } else if (currentMode === 'shortBreak') {
+          timeLeft = parseInt(document.getElementById("shortBreakInput").value) * 60;
+        } else {
+          timeLeft = parseInt(document.getElementById("longBreakInput").value) * 60;
+        }
+        updateDisplay();
       }
+      
+      isRunning = true;
+      document.getElementById('startBtn').disabled = true;
+      document.getElementById('pauseBtn').disabled = false;
+      document.getElementById('timer').classList.add('pulsing');
+      
       timer = setInterval(() => {
         if (timeLeft > 0) {
           timeLeft--;
           updateDisplay();
         } else {
           clearInterval(timer);
+          timer = null;
           isRunning = false;
+          document.getElementById('timer').classList.remove('pulsing');
+          document.getElementById('startBtn').disabled = false;
+          document.getElementById('pauseBtn').disabled = true;
+          
+          playSound(alarmSound);
+          
+          // Move to next mode
+          if (currentMode === 'focus') {
+            // After focus, determine if we need short break or long break
+            if (cycleCount < 4) {
+              currentMode = 'shortBreak';
+              timeLeft = parseInt(document.getElementById("shortBreakInput").value) * 60;
+              cycleCount++;
+            } else {
+              currentMode = 'longBreak';
+              timeLeft = parseInt(document.getElementById("longBreakInput").value) * 60;
+              cycleCount = 1;
+            }
+          } else {
+            // After any break, go back to focus
+            currentMode = 'focus';
+            timeLeft = parseInt(document.getElementById("focusInput").value) * 60;
+          }
+          
+          updateModeIndicator();
+          updateDisplay();
+          
+          // Show browser notification if supported
+          if (Notification.permission === "granted") {
+            new Notification("Pixel Pomodoro", {
+              body: `Time's up! ${currentMode.replace(/([A-Z])/g, ' $1').toUpperCase()} started.`,
+              icon: "favicon.ico"
+            });
+          }
         }
       }, 1000);
     }
-
+    
+    // Pause timer function
     function pauseTimer() {
+      if (!isRunning) return;
+      
+      playSound(clickSound);
       clearInterval(timer);
+      timer = null;
       isRunning = false;
+      document.getElementById('startBtn').disabled = false;
+      document.getElementById('pauseBtn').disabled = true;
+      document.getElementById('timer').classList.remove('pulsing');
     }
-
+    
+    // Reset timer function
     function resetTimer() {
+      playSound(clickSound);
       clearInterval(timer);
+      timer = null;
       isRunning = false;
-      const focusMinutes = parseInt(document.getElementById("focusInput").value);
-      timeLeft = focusMinutes * 60;
+      
+      // Reset time based on current mode
+      if (currentMode === 'focus') {
+        timeLeft = parseInt(document.getElementById("focusInput").value) * 60;
+      } else if (currentMode === 'shortBreak') {
+        timeLeft = parseInt(document.getElementById("shortBreakInput").value) * 60;
+      } else {
+        timeLeft = parseInt(document.getElementById("longBreakInput").value) * 60;
+      }
+      
+      document.getElementById('startBtn').disabled = false;
+      document.getElementById('pauseBtn').disabled = true;
+      document.getElementById('timer').classList.remove('pulsing');
       updateDisplay();
     }
-
-    updateDisplay();
+    
+    // Change mode manually
+    function changeMode(mode) {
+      currentMode = mode;
+      resetTimer();
+      updateModeIndicator();
+    }
+    
+    // Toggle sound function
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const soundToggle = document.getElementById('soundToggle');
+      if (soundEnabled) {
+        soundToggle.textContent = '🔊';
+      } else {
+        soundToggle.textContent = '🔇';
+      }
+    }
+    
+    // Play sound helper
+    function playSound(sound) {
+      if (soundEnabled) {
+        sound.volume = 0.5;
+        sound.play();
+      }
+    }
+    
+    // Ask for notification permission
+    function askNotificationPermission() {
+      if (Notification && Notification.permission !== "granted") {
+        Notification.requestPermission();
+      }
+    }
+    
+    // Event listeners for setting inputs
+    document.getElementById('focusInput').addEventListener('change', function() {
+      if (currentMode === 'focus' && !isRunning) {
+        timeLeft = parseInt(this.value) * 60;
+        updateDisplay();
+      }
+    });
+    
+    document.getElementById('shortBreakInput').addEventListener('change', function() {
+      if (currentMode === 'shortBreak' && !isRunning) {
+        timeLeft = parseInt(this.value) * 60;
+        updateDisplay();
+      }
+    });
+    
+    document.getElementById('longBreakInput').addEventListener('change', function() {
+      if (currentMode === 'longBreak' && !isRunning) {
+        timeLeft = parseInt(this.value) * 60;
+        updateDisplay();
+      }
+    });
+    
+    // Initialize on load
+    window.onload = function() {
+      init();
+      askNotificationPermission();
+    };
   </script>
 
 </body>
